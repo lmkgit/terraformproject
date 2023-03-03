@@ -54,7 +54,7 @@ resource "aws_internet_gateway" "maingw" {
 resource "aws_route_table" "mainpriv" {
   vpc_id = aws_vpc.main.id
 
-  route = []
+  #route = []
 
   tags = {
     Name = "main_priv_rt"
@@ -64,7 +64,7 @@ resource "aws_route_table" "mainpriv" {
 resource "aws_route_table" "mainpub" {
   vpc_id = aws_vpc.main.id
 
-  route = []
+  #route = []
 
   tags = {
     Name = "main_pub_rt"
@@ -74,4 +74,28 @@ resource "aws_route_table" "mainpub" {
 resource "aws_route_table_association" "main_pub" {
   subnet_id      = aws_subnet.mainpub.id
   route_table_id = aws_route_table.mainpub.id
+}
+
+resource "aws_route_table_association" "main_priv" {
+  subnet_id      = aws_subnet.mainpriv.id
+  route_table_id = aws_route_table.mainpriv.id
+}
+
+resource "aws_instance" "mainec2" {
+  ami           = "ami-006dcf34c09e50022"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "Project_EC2"
+  }
+}
+
+
+resource "aws_s3_bucket" "mainbkt" {
+  bucket = "my-tf-test-bucket"
+
+  tags = {
+    Name        = "My main bucket"
+    Environment = "DevOps"
+  }
 }
